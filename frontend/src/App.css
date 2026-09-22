@@ -1,0 +1,263 @@
+.app-shell {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: grid;
+  place-items: start center;
+  padding: clamp(72px, 12vh, 128px) 16px 56px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.shortener {
+  position: relative;
+  width: min(100%, 640px);
+  padding: clamp(28px, 7vw, 48px);
+  border-radius: 2px;
+  background: #10101000;
+  text-align: center;
+}
+
+.brand-mark {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 20px;
+  border-radius: 9px;
+  color: #fff;
+  background: #646cff;
+  font-weight: 700;
+}
+
+.eyebrow,
+.result-label {
+  color: #a1a1aa;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+}
+
+h1 {
+  margin: 0;
+  color: #fafafa;
+  font-size: clamp(62px, 8vw, 70px);
+  letter-spacing: -0.06em;
+  line-height: 1;
+}
+
+.intro {
+  margin: 16px 0 36px;
+  color: #a1a1aa;
+  font-size: 16px;
+}
+
+.shorten-form {
+  text-align: left;
+}
+
+.shorten-form label {
+  display: block;
+  margin-bottom: 8px;
+  color: #e4e4e7;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.input-row {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
+.input-row input {
+  min-width: 0;
+  flex: 1;
+  padding: 13px 14px;
+  border: 1px solid #3f3f46;
+  border-radius: 2px;
+  outline: 0;
+  color: #f4f4f5;
+  background: #18181b;
+  font-size: 14px;
+}
+
+.input-row input:focus {
+  border-color: #646cff;
+  box-shadow: 0 0 0 3px rgba(100, 108, 255, 0.14);
+}
+
+.input-row button,
+.copy-button {
+  border: 0;
+  border-radius: 2px;
+  color: #fff;
+  background: #0713fc;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.input-row button {
+  padding: 0 20px;
+}
+
+.input-row button:hover:not(:disabled),
+.copy-button:hover {
+  background: #535bf2;
+}
+
+.input-row button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.custom-code-toggle {
+  margin-top: 14px;
+  padding: 0;
+  border: 0;
+  color: #8b9aff;
+  background: transparent;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.custom-code-toggle:hover {
+  color: #b3bcff;
+  text-decoration: underline;
+}
+
+.custom-code-field {
+  margin-top: 18px;
+}
+
+.custom-code-field input {
+  width: 100%;
+  padding: 13px 14px;
+  border: 1px solid #3f3f46;
+  border-radius: 2px;
+  outline: 0;
+  color: #f4f4f5;
+  background: #18181b;
+  font-size: 14px;
+}
+
+.custom-code-field input:focus {
+  border-color: #646cff;
+  box-shadow: 0 0 0 3px rgba(100, 108, 255, 0.14);
+}
+
+.custom-code-field span {
+  display: block;
+  margin-top: 7px;
+  color: #71717a;
+  font-size: 12px;
+}
+
+.result {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 20px;
+  padding: 14px 16px;
+  border: 1px solid #29304f;
+  border-radius: 2px;
+  background: #11182758;
+  backdrop-filter: blur(20px);
+  text-align: left;
+}
+
+.result-label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 11px;
+}
+
+.result a {
+  color: #8b9aff;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+.copy-button {
+  min-height: 36px;
+  padding: 0 14px;
+  white-space: nowrap;
+}
+
+.status {
+  margin: 16px 0 0;
+  color: #a1a1aa;
+  font-size: 13px;
+}
+
+footer {
+  position: absolute;
+  right: 16px;
+  bottom: 12px;
+  left: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px 18px;
+  color: #71717a;
+  font-size: 12px;
+  text-align: center;
+}
+
+@media (max-width: 700px) {
+  .app-shell {
+    align-items: start;
+    padding: 48px 16px 56px;
+  }
+
+  .shortener {
+    margin: 0 auto;
+  }
+
+  .input-row {
+    flex-direction: column;
+  }
+
+  .input-row button {
+    min-height: 46px;
+  }
+
+  .result {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .copy-button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 380px) {
+  .app-shell {
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
+  .shortener {
+    padding: 28px 18px;
+  }
+
+  h1 {
+    font-size: 42px;
+  }
+
+  .intro {
+    margin-bottom: 28px;
+    font-size: 15px;
+  }
+}
