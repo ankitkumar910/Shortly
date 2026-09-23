@@ -26,4 +26,6 @@ public class ShortUrl {
 
     @Column(nullable = false)
     private long clickCount = 0;
+
+    private long expireAt ;
 }

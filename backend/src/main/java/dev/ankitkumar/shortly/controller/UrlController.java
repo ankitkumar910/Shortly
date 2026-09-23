@@ -5,17 +5,15 @@ import dev.ankitkumar.shortly.exception.InvalidShortCodeException;
 import dev.ankitkumar.shortly.exception.LongUrlNotFoundException;
 import dev.ankitkumar.shortly.service.UrlService;
 import jakarta.validation.ConstraintViolationException;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.time.LocalDateTime;
 
 @Slf4j
 @RestController
@@ -28,15 +26,18 @@ public class UrlController {
 
     @PostMapping("/api/v1/shorten")
     public ResponseEntity<ResponseDto> shortenUrl(@RequestParam(name = "u") String url,
-                                                  @RequestParam(name = "shortCode",required = false) String customShortCode) {
+                                                  @RequestParam(name = "shortCode", required = false) String customShortCode,
+                                                  @RequestParam(name = "expire", required = false) LocalDateTime expireAt
 
-        String shortenedUrl = urlService.shorten(url,customShortCode);
+    ) {
+
+        String shortenedUrl = urlService.shorten(url, customShortCode,expireAt);
         ResponseDto responseDto = ResponseDto.builder().shortUrl(shortenedUrl).longUrl(url).build();
         return ResponseEntity.ok(responseDto);
     }
 
     @GetMapping("/{shortCode}")
-    public ResponseEntity<?> redirectUrl(@PathVariable  String shortCode) {
+    public ResponseEntity<?> redirectUrl(@PathVariable String shortCode) {
 
         System.out.println("ShortCode:" + shortCode);
 
