@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Table(name = "urls")
@@ -19,7 +20,7 @@ public class ShortUrl {
     private long id;
     @Column(nullable = false)
     private String longUrl;
-    @Column(nullable = true,unique = true)
+    @Column(unique = true)
     private String shortUrl;
     @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
@@ -27,5 +28,5 @@ public class ShortUrl {
     @Column(nullable = false)
     private long clickCount = 0;
 
-    private long expireAt ;
+    private Instant expireAt;
 }

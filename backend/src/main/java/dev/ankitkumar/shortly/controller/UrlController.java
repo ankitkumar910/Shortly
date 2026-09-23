@@ -1,6 +1,7 @@
 package dev.ankitkumar.shortly.controller;
 
 import dev.ankitkumar.shortly.dto.ResponseDto;
+import dev.ankitkumar.shortly.exception.ExpiredDateException;
 import dev.ankitkumar.shortly.exception.InvalidShortCodeException;
 import dev.ankitkumar.shortly.exception.LongUrlNotFoundException;
 import dev.ankitkumar.shortly.service.UrlService;
@@ -13,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Slf4j
 @RestController
@@ -24,14 +25,14 @@ public class UrlController {
 
     private UrlService urlService;
 
+
     @PostMapping("/api/v1/shorten")
-    public ResponseEntity<ResponseDto> shortenUrl(@RequestParam(name = "u") String url,
-                                                  @RequestParam(name = "shortCode", required = false) String customShortCode,
-                                                  @RequestParam(name = "expire", required = false) LocalDateTime expireAt
+    public ResponseEntity<ResponseDto> shortenUrl(@RequestParam(name = "u") String url, @RequestParam(name = "shortCode", required = false) String customShortCode, @RequestParam(name = "expire", required = false) Instant expireAt
 
     ) {
 
-        String shortenedUrl = urlService.shorten(url, customShortCode,expireAt);
+
+        String shortenedUrl = urlService.shorten(url, customShortCode, expireAt);
         ResponseDto responseDto = ResponseDto.builder().shortUrl(shortenedUrl).longUrl(url).build();
         return ResponseEntity.ok(responseDto);
     }
@@ -47,15 +48,16 @@ public class UrlController {
             log.info("Long url found: short url = {}", shortCode);
             return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(longUrl)).build();
 
-        } catch (LongUrlNotFoundException | InvalidShortCodeException | ConstraintViolationException e) {
+        } catch (LongUrlNotFoundException | InvalidShortCodeException | ConstraintViolationException |
+                 ExpiredDateException e) {
             log.warn(e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.TEXT_HTML).body(buildNotFoundHtml());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.TEXT_HTML).body(buildNotFoundHtml(e.getMessage()));
         }
 
 
     }
 
-    private String buildNotFoundHtml() {
+    private String buildNotFoundHtml(String message) {
         return """
                 <!DOCTYPE html>
                 <html lang="en">
@@ -162,6 +164,10 @@ public class UrlController {
                     <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,700&display=swap" rel="stylesheet">
                 </head>
                 <body>
+                
+                <script>
+                console.log(%s);
+                </script>
                 <main class="container">
                 
                     <div class="code kanit-bold" aria-hidden="true">404</div>

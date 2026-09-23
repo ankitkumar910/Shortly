@@ -1,12 +1,13 @@
 package dev.ankitkumar.shortly.service;
 
 
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+
+import java.time.Duration;
+import java.time.Instant;
 
 @Slf4j
 @Service
@@ -23,12 +24,18 @@ public class RedisService {
         return value;
     }
 
-    public void add(String shortCode, String longUrl) {
+    public void add(String shortCode, String longUrl, Instant expiration) {
 
         if(shortCode == null) return;
         if(longUrl == null) return;
 
-        redisTemplate.opsForValue().append(shortCode,longUrl);
+       if(expiration != null){
+           Duration duration = Duration.between(Instant.now(),expiration);
+           redisTemplate.opsForValue().set(shortCode,longUrl,duration);
+       }else {
+           redisTemplate.opsForValue().set(shortCode,longUrl);
+       }
+
         log.info("Value added to Redis: shortCode = {}",shortCode);
     }
 }

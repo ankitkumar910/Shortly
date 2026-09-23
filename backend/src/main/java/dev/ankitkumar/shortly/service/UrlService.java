@@ -2,6 +2,7 @@ package dev.ankitkumar.shortly.service;
 
 import dev.ankitkumar.shortly.entity.ShortUrl;
 import dev.ankitkumar.shortly.exception.DuplicateEntryException;
+import dev.ankitkumar.shortly.exception.ExpiredDateException;
 import dev.ankitkumar.shortly.exception.InvalidShortCodeException;
 import dev.ankitkumar.shortly.exception.LongUrlNotFoundException;
 import dev.ankitkumar.shortly.repository.UrlRepository;
@@ -13,7 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 
 @Slf4j
@@ -33,14 +34,22 @@ public class UrlService {
     }
 
 
-    public String shorten(String url, @Pattern(regexp = "^[0-9a-zA-Z]+", message = "Invalid short code provided.") String customShortCode, LocalDateTime expireAt) {
+    public String shorten(String url, @Pattern(regexp = "^[0-9a-zA-Z]+", message = "Invalid short code provided.") String customShortCode, Instant expireAt) {
 
 
         if (url.isBlank() || !(url.startsWith("https://") || url.startsWith("http://")))
             throw new IllegalArgumentException("Long url is not valid.");
+
         ShortUrl shortUrl1 = new ShortUrl();
-        System.out.println("CustomShortCode : " + customShortCode);
+
         shortUrl1.setLongUrl(url);
+        System.out.println("ExpireDate:"+expireAt);
+
+        if(expireAt != null){
+
+            if(expireAt.isAfter(Instant.now())) shortUrl1.setExpireAt(expireAt);
+             else throw new IllegalArgumentException("Expiry Date must be of future.");
+        }
 
         ShortUrl shortUrl2 = repository.save(shortUrl1);
 
@@ -79,12 +88,17 @@ public class UrlService {
         }
 
 
+        Instant expiration = shortUrl.getExpireAt();
+
+        if(expiration != null && expiration.isBefore(Instant.now())) throw  new ExpiredDateException("Url is expired.");
+
+
         //increase the click count
         shortUrl.setClickCount(shortUrl.getClickCount() + 1);
         repository.save(shortUrl);
 
         // save to redis
-        redisService.add(shortCode,shortUrl.getLongUrl());
+        redisService.add(shortCode,shortUrl.getLongUrl(),expiration);
 
         return shortUrl.getLongUrl();
     }
