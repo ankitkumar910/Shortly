@@ -138,6 +138,32 @@ h1 {
   margin-top: 18px;
 }
 
+.expiration-field {
+  margin-top: 18px;
+}
+
+.expiration-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.expiration-presets button {
+  padding: 6px 9px;
+  border: 1px solid #3f3f46;
+  border-radius: 2px;
+  color: #a1a1aa;
+  background: #18181b;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.expiration-presets button:hover {
+  border-color: #646cff;
+  color: #f4f4f5;
+}
+
 .custom-code-field input {
   width: 100%;
   padding: 13px 14px;
@@ -154,7 +180,30 @@ h1 {
   box-shadow: 0 0 0 3px rgba(100, 108, 255, 0.14);
 }
 
+.expiration-field input {
+  width: 100%;
+  padding: 13px 14px;
+  border: 1px solid #3f3f46;
+  border-radius: 2px;
+  outline: 0;
+  color: #f4f4f5;
+  background: #18181b;
+  font-size: 14px;
+}
+
+.expiration-field input:focus {
+  border-color: #646cff;
+  box-shadow: 0 0 0 3px rgba(100, 108, 255, 0.14);
+}
+
 .custom-code-field span {
+  display: block;
+  margin-top: 7px;
+  color: #71717a;
+  font-size: 12px;
+}
+
+.expiration-field span {
   display: block;
   margin-top: 7px;
   color: #71717a;
@@ -179,6 +228,9 @@ h1 {
   display: block;
   margin-bottom: 5px;
   font-size: 11px;
+}
+.divider{
+  display: inline;
 }
 
 .result a {
@@ -259,5 +311,9 @@ footer {
   .intro {
     margin-bottom: 28px;
     font-size: 15px;
+  }
+
+  .divider{
+    display: none;
   }
 }

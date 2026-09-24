@@ -2,6 +2,7 @@ package dev.ankitkumar.shortly.utils;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -20,6 +21,11 @@ class UrlShortenerTest {
         Assertions.assertEquals("2Bi",encodedText);
 
         Assertions.assertThrows(IllegalArgumentException.class,()-> urlShortener.shorten(-1L));
+    }
+
+    @Test
+    void test1(){
+        System.out.println("Hello Ankit!");
     }
 
 

@@ -11,10 +11,13 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import java.time.Instant;
+import java.util.Map;
+import java.util.NoSuchElementException;
 
 
 @Slf4j
@@ -74,7 +77,11 @@ public class UrlService {
 
 
         //simulateDelay();
-        if (redisService.get(shortCode) != null) return redisService.get(shortCode);
+        if (redisService.get(shortCode) != null) {
+
+            redisService.increaseClickCount(shortCode);
+            return redisService.get(shortCode);
+        }
 
         Long id = UrlShortener.extractId(shortCode);
 
@@ -93,12 +100,14 @@ public class UrlService {
         if(expiration != null && expiration.isBefore(Instant.now())) throw  new ExpiredDateException("Url is expired.");
 
 
-        //increase the click count
-        shortUrl.setClickCount(shortUrl.getClickCount() + 1);
-        repository.save(shortUrl);
+//        shortUrl.setClickCount(shortUrl.getClickCount() + 1);
+//        repository.save(shortUrl);
 
         // save to redis
+
         redisService.add(shortCode,shortUrl.getLongUrl(),expiration);
+
+        redisService.increaseClickCount(shortCode);
 
         return shortUrl.getLongUrl();
     }
@@ -112,4 +121,27 @@ public class UrlService {
         }
         System.out.println("Delay end.Thread : " + Thread.currentThread().getName());
     }
+
+   @Scheduled(fixedRate = 60000) // 2 minutes = 120000 milliseconds
+    public void sayHello(){
+       log.info("Flush click count in the db from Redis.");
+       Map<String,Long>  clickCounts =  redisService.getAllClickCounts();
+
+       for(String shortCode : clickCounts.keySet()){
+           try {
+               ShortUrl shortUrl = repository.findByShortUrl(shortCode).orElseThrow();
+               System.out.println("Key : "+ shortCode+ ", value : " + clickCounts.getOrDefault(shortCode,0L));
+
+               shortUrl.setClickCount(shortUrl.getClickCount() + clickCounts.getOrDefault(shortCode,0L));
+               repository.save(shortUrl);
+           } catch (NoSuchElementException e) {
+               log.warn("No entry found: shortCode = {}",shortCode);
+           }
+       }
+
+       log.info("Click count flushed in the db from Redis.");
+
+    }
+
+
 }
