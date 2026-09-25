@@ -37,6 +37,16 @@ public class GlobalExceptionHandler {
                 .body(exceptionResponseDto);
     }
 
+    @ExceptionHandler(RateLimitException.class)
+    public ResponseEntity<ExceptionResponseDto> rateLimitExceptionHandler(RateLimitException exception) {
+        ExceptionResponseDto exceptionResponseDto = new ExceptionResponseDto();
+        exceptionResponseDto.setMessage(exception.getLocalizedMessage());
+
+        return ResponseEntity
+                .status(HttpStatus.TOO_MANY_REQUESTS)
+                .body(exceptionResponseDto);
+    }
+
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ExceptionResponseDto> constraintViolationExceptionHandler(ConstraintViolationException exception) {
@@ -70,4 +80,6 @@ public class GlobalExceptionHandler {
                         .message(message)
                         .build());
     }
+
+
 }

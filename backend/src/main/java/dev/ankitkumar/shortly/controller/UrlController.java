@@ -4,7 +4,10 @@ import dev.ankitkumar.shortly.dto.ResponseDto;
 import dev.ankitkumar.shortly.exception.ExpiredDateException;
 import dev.ankitkumar.shortly.exception.InvalidShortCodeException;
 import dev.ankitkumar.shortly.exception.LongUrlNotFoundException;
+import dev.ankitkumar.shortly.exception.RateLimitException;
+import dev.ankitkumar.shortly.service.RateLimitService;
 import dev.ankitkumar.shortly.service.UrlService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,13 +27,18 @@ import java.time.Instant;
 public class UrlController {
 
     private UrlService urlService;
+    private RateLimitService rateLimitService;
 
 
     @PostMapping("/api/v1/shorten")
-    public ResponseEntity<ResponseDto> shortenUrl(@RequestParam(name = "u") String url, @RequestParam(name = "shortCode", required = false) String customShortCode, @RequestParam(name = "expire", required = false) Instant expireAt
+    public ResponseEntity<ResponseDto> shortenUrl(HttpServletRequest request, @RequestParam(name = "u") String url, @RequestParam(name = "shortCode", required = false) String customShortCode, @RequestParam(name = "expire", required = false) Instant expireAt
 
     ) {
 
+        String ip = request.getRemoteAddr();
+        if(!rateLimitService.isAllowed(ip)){
+            throw  new RateLimitException("Too many requests. Try again later.");
+        }
 
         String shortenedUrl = urlService.shorten(url, customShortCode, expireAt);
         ResponseDto responseDto = ResponseDto.builder().shortUrl(shortenedUrl).longUrl(url).build();
