@@ -72,7 +72,7 @@ public class GlobalExceptionHandler {
         if (e.getName().equals("expire")){
             message = "Provide a valid date-time.Make sure date-time is in ISO 8601 format.";
         }
-        System.out.println(e.getMessage());
+
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(ExceptionResponseDto

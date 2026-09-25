@@ -46,7 +46,7 @@ public class UrlService {
         ShortUrl shortUrl1 = new ShortUrl();
 
         shortUrl1.setLongUrl(url);
-        System.out.println("ExpireDate:"+expireAt);
+
 
         if(expireAt != null){
 
@@ -113,13 +113,13 @@ public class UrlService {
     }
 
     private void simulateDelay() {
-        System.out.println("Delay Started.Thread : " + Thread.currentThread().getName());
+
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
             log.error(e.getMessage());
         }
-        System.out.println("Delay end.Thread : " + Thread.currentThread().getName());
+
     }
 
    @Scheduled(fixedRate = 60000) // 2 minutes = 120000 milliseconds
@@ -130,7 +130,6 @@ public class UrlService {
        for(String shortCode : clickCounts.keySet()){
            try {
                ShortUrl shortUrl = repository.findByShortUrl(shortCode).orElseThrow();
-               System.out.println("Key : "+ shortCode+ ", value : " + clickCounts.getOrDefault(shortCode,0L));
 
                shortUrl.setClickCount(shortUrl.getClickCount() + clickCounts.getOrDefault(shortCode,0L));
                repository.save(shortUrl);

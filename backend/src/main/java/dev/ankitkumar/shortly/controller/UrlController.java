@@ -48,7 +48,6 @@ public class UrlController {
     @GetMapping("/{shortCode}")
     public ResponseEntity<?> redirectUrl(@PathVariable String shortCode) {
 
-        System.out.println("ShortCode:" + shortCode);
 
         try {
             log.info("Find long url: short url = {}", shortCode);

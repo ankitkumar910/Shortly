@@ -1,7 +1,9 @@
 package dev.ankitkumar.shortly.utils;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class UrlShortener {
 
@@ -25,7 +27,7 @@ public class UrlShortener {
             int value = CHARS.indexOf(c);
 
             if (value == -1) {
-                System.out.println("Invalid character: " + c) ;
+                log.warn("Invalid character: {}", c);
                 throw new IllegalArgumentException("Invalid character in short code: " + c);
             }
 
