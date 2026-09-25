@@ -23,10 +23,6 @@ class UrlShortenerTest {
         Assertions.assertThrows(IllegalArgumentException.class,()-> urlShortener.shorten(-1L));
     }
 
-    @Test
-    void test1(){
-        System.out.println("Hello Ankit!");
-    }
 
 
 }

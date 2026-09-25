@@ -1,0 +1,21 @@
+services:
+
+  mysql:
+    image: mysql:latest
+    container_name: shortly-mysql
+    environment:
+      MYSQL_DATABASE: shortlydb
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  redis:
+    image: redis:7-alpine
+    container_name: shortly-redis
+    ports:
+      - "6379:6379"
+
+volumes:
+  mysql_data:
