@@ -22,7 +22,7 @@ import java.time.Instant;
 @Slf4j
 @RestController
 @RequestMapping("")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = {"http://localhost:5173", "https://shortly100.vercel.app/"})
 @AllArgsConstructor
 public class UrlController {
 
