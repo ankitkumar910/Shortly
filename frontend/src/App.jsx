@@ -42,8 +42,7 @@ function App() {
 		setShortenedUrl("");
 		setIsSubmitting(true);
 
-		console.log(`🌐 Base Url : ${config.apiBaseUrl}`);
-
+		
 		try {
 			const uri = new URL(config.apiBaseUrl);
 			uri.searchParams.set("u", url);
