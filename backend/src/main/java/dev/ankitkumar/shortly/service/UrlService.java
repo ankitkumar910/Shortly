@@ -27,17 +27,25 @@ public class UrlService {
     private final UrlRepository repository;
     private final UrlShortener urlShortener;
     private final RedisService redisService;
+
     @Value("${app.shortly.shorten.host}")
     private String domainName;
+
+    @Value("${spring.data.redis.url}")
+    private String redisUrl;
 
     public UrlService(UrlRepository repository, UrlShortener urlShortener, RedisService redisService) {
         this.repository = repository;
         this.urlShortener = urlShortener;
         this.redisService = redisService;
+
     }
 
 
     public String shorten(String url, @Pattern(regexp = "^[0-9a-zA-Z]+", message = "Invalid short code provided.") String customShortCode, Instant expireAt) {
+
+        System.out.println("🌐App Host : "+domainName);
+        System.out.println("🔗Redis URL : " + redisUrl);
 
 
         if (url.isBlank() || !(url.startsWith("https://") || url.startsWith("http://")))
@@ -69,6 +77,8 @@ public class UrlService {
 
 
         repository.save(shortUrl2);
+
+
 
         return domainName + "/" + shortUrl1.getShortUrl();
     }

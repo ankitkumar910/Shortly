@@ -1,18 +1,22 @@
 package dev.ankitkumar.shortly.utils;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
 public class UrlShortener {
 
+
+
+
     private static final String CHARS =
             "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private static final int BASE = 62;
 
     public static Long extractId(String shortCode) {
-
 
         if (shortCode == null || shortCode.isEmpty()) {
             return -1L;
