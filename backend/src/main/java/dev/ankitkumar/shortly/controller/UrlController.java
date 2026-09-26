@@ -30,6 +30,14 @@ public class UrlController {
     private RateLimitService rateLimitService;
 
 
+    @GetMapping("")
+    public ResponseEntity<?> home(){
+        return ResponseEntity
+                .status(HttpStatus.FOUND)
+                .location(URI.create("https://shortly100.vercel.app"))
+                .build();
+    }
+
     @PostMapping("/api/v1/shorten")
     public ResponseEntity<ResponseDto> shortenUrl(HttpServletRequest request, @RequestParam(name = "u") String url, @RequestParam(name = "shortCode", required = false) String customShortCode, @RequestParam(name = "expire", required = false) Instant expireAt
 
@@ -53,7 +61,9 @@ public class UrlController {
             log.info("Find long url: short url = {}", shortCode);
             String longUrl = urlService.longUrl(shortCode);
             log.info("Long url found: short url = {}", shortCode);
-            return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(longUrl)).build();
+            return ResponseEntity
+                    .status(HttpStatus.FOUND)
+                    .location(URI.create(longUrl)).build();
 
         } catch (LongUrlNotFoundException | InvalidShortCodeException | ConstraintViolationException |
                  ExpiredDateException e) {
