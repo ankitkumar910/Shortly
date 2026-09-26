@@ -132,7 +132,7 @@ public class UrlService {
 
     }
 
-  // @Scheduled(fixedRate = 60000) // 2 minutes = 120000 milliseconds
+@Scheduled(fixedRate = 180000) // 3 minutes = 180000 milliseconds
     public void sayHello(){
        log.info("Flush click count in the db from Redis.");
        Map<String,Long>  clickCounts =  redisService.getAllClickCounts();
